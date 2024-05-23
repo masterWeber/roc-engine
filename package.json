@@ -1,0 +1,11 @@
+{
+  "name": "roc-engine",
+  "version": "0.0.1",
+  "description": "Simple 2D engine",
+  "scripts": {},
+  "author": "Master Weber <master.weber@outlook.com>",
+  "license": "MIT",
+  "dependencies": {
+    "gl-matrix": "^3.4.3"
+  }
+}
