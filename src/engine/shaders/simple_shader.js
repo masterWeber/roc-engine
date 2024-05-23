@@ -1,8 +1,8 @@
 'use strict'
 
-import * as glSys from './core/gl.js'
-import * as vertexBuffer from './core/vertex_buffer.js'
-import * as text from './resources/text.js'
+import * as glSys from '../core/gl.js'
+import * as vertexBuffer from '../core/vertex_buffer.js'
+import * as text from '../resources/text.js'
 
 class SimpleShader {
   mCompiledShader = null
@@ -11,6 +11,10 @@ class SimpleShader {
   mModelMatrixRef = null
   mCameraMatrixRef = null
 
+  /**
+   * @param {string} vertexShaderID
+   * @param {string} fragmentShaderID
+   */
   constructor (vertexShaderID, fragmentShaderID) {
     const gl = glSys.get()
 

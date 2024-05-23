@@ -14,11 +14,15 @@ function get () {
 function init (htmlCanvasID) {
   mCanvas = document.querySelector(`#${htmlCanvasID}`)
 
-  mGL = mCanvas.getContext('webgl2')
+  mGL = mCanvas.getContext('webgl2', { alpha: false })
 
   if (mGL === null) {
     document.write('<br><b>WebGL 2 is not supported!</b>')
   }
+
+  mGL.blendFunc(mGL.SRC_ALPHA, mGL.ONE_MINUS_SRC_ALPHA)
+  mGL.enable(mGL.BLEND)
+  mGL.pixelStorei(mGL.UNPACK_FLIP_Y_WEBGL, true)
 }
 
 function cleanUp () {
