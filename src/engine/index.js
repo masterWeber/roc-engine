@@ -8,6 +8,8 @@ import FontRenderable from './renderables/font_renderable.js'
 import Transform from './transform.js'
 import Camera from './camera.js'
 import Scene from './scene.js'
+import GameObject from './game_objects/game_object.js'
+import GameObjectSet from './game_objects/game_object_set.js'
 import * as loop from './core/loop.js'
 import * as input from './input.js'
 import * as text from './resources/text.js'
@@ -46,6 +48,17 @@ function cleanUp () {
   glSys.cleanUp()
 }
 
+vec2.rotate = function (out, a, c) {
+  const r = []
+  // perform rotation
+  r[0] = a[0] * Math.cos(c) - a[1] * Math.sin(c)
+  r[1] = a[0] * Math.sin(c) + a[1] * Math.cos(c)
+  out[0] = r[0]
+  out[1] = r[1]
+
+  return r
+}
+
 export default {
   audio,
   text,
@@ -64,6 +77,8 @@ export default {
   FontRenderable,
   eTexCoordArrayIndex,
   eAnimationType,
+  GameObject,
+  GameObjectSet,
   init,
   cleanUp,
   clearCanvas
