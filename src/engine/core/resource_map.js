@@ -2,11 +2,10 @@
 
 class MapEntry {
   mData
-  mRefCount
+  mRefCount = 1
 
   constructor (data) {
     this.mData = data
-    this.mRefCount = 1
   }
 
   decRef () {
@@ -77,7 +76,7 @@ function loadDecodeParse (path, decodeResource, parseResource) {
       })
     pushPromise(fetchPromise)
   } else {
-    incRef(path)  // increase reference count
+    incRef(path)
   }
   return fetchPromise
 }
@@ -92,8 +91,11 @@ function unload (path) {
   return entry.canRemove()
 }
 
-function pushPromise (p) {
-  mOutstandingPromises.push(p)
+/**
+ * @param {Promise} promise
+ */
+function pushPromise (promise) {
+  mOutstandingPromises.push(promise)
 }
 
 async function waitOnPromises () {

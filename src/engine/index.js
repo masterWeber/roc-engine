@@ -4,6 +4,7 @@ import Renderable from './renderables/renderable.js'
 import TextureRenderable from './renderables/texture_renderable.js'
 import SpriteRenderable, { eTexCoordArrayIndex } from './renderables/sprite_renderable.js'
 import SpriteAnimateRenderable, { eAnimationType } from './renderables/sprite_animate_renderable.js'
+import FontRenderable from './renderables/font_renderable.js'
 import Transform from './transform.js'
 import Camera from './camera.js'
 import Scene from './scene.js'
@@ -13,6 +14,8 @@ import * as text from './resources/text.js'
 import * as xml from './resources/xml.js'
 import * as audio from './resources/audio.js'
 import * as texture from './resources/texture.js'
+import * as font from './resources/font.js'
+import * as defaultResources from './resources/default_resources.js'
 
 import * as glSys from './core/gl.js'
 import * as vertexBuffer from './core/vertex_buffer.js'
@@ -21,9 +24,10 @@ import * as shaderResources from './core/shader_resources.js'
 function init (htmlCanvasID) {
   glSys.init(htmlCanvasID)
   vertexBuffer.init()
-  shaderResources.init()
   input.init()
   audio.init()
+  shaderResources.init()
+  defaultResources.init()
 }
 
 function clearCanvas (color) {
@@ -34,9 +38,10 @@ function clearCanvas (color) {
 
 function cleanUp () {
   loop.cleanUp()
+  shaderResources.cleanUp()
+  defaultResources.cleanUp()
   audio.cleanUp()
   input.cleanUp()
-  shaderResources.cleanUp()
   vertexBuffer.cleanUp()
   glSys.cleanUp()
 }
@@ -46,6 +51,8 @@ export default {
   text,
   xml,
   texture,
+  font,
+  defaultResources,
   input,
   Camera,
   Scene,
@@ -54,6 +61,7 @@ export default {
   TextureRenderable,
   SpriteRenderable,
   SpriteAnimateRenderable,
+  FontRenderable,
   eTexCoordArrayIndex,
   eAnimationType,
   init,
