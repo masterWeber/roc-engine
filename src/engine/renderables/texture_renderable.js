@@ -19,7 +19,9 @@ class TextureRenderable extends Renderable {
     super.draw(camera)
   }
 
-  getTexture () { return this.mTexture }
+  getTexture () {
+    return this.mTexture
+  }
 
   setTexture (newTexture) {
     this.mTexture = newTexture

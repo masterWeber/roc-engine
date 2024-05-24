@@ -2,6 +2,7 @@
 
 import Renderable from './renderables/renderable.js'
 import TextureRenderable from './renderables/texture_renderable.js'
+import SpriteRenderable, { eTexCoordArrayIndex } from './renderables/sprite_renderable.js'
 import Transform from './transform.js'
 import Camera from './camera.js'
 import Scene from './scene.js'
@@ -50,6 +51,8 @@ export default {
   Transform,
   Renderable,
   TextureRenderable,
+  SpriteRenderable,
+  eTexCoordArrayIndex,
   init,
   cleanUp,
   clearCanvas

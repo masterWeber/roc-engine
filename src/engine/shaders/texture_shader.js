@@ -5,7 +5,7 @@ import * as vertexBuffer from '../core/vertex_buffer.js'
 import SimpleShader from './simple_shader.js'
 
 class TextureShader extends SimpleShader {
-  mTextureCoordinateRef = null
+  mTextureCoordinateRef
   mSamplerRef
 
   /**
@@ -28,7 +28,7 @@ class TextureShader extends SimpleShader {
     gl.vertexAttribPointer(this.mTextureCoordinateRef, 2, gl.FLOAT, false, 0, 0)
     gl.enableVertexAttribArray(this.mTextureCoordinateRef)
 
-    gl.uniform1i(this.mSamplerRef, 0)  // texture.activateTexture() binds to Texture0
+    gl.uniform1i(this.mSamplerRef, 0)
   }
 
   _getTexCoordBuffer () {
