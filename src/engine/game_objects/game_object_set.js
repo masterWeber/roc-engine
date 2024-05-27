@@ -36,7 +36,7 @@ class GameObjectSet {
   }
 
   /**
-   * @param {Camera} aCamera
+   * @param {Camera_main} aCamera
    */
   draw (aCamera) {
     for (let i = 0; i < this.mSet.length; i++) {

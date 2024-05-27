@@ -1,6 +1,6 @@
 'use strict'
 
-import BoundingBox from '../bounding_box.js'
+import BoundingBox from '../utils/bounding_box.js'
 
 class GameObject {
   mRenderComponent

@@ -1,18 +1,20 @@
 'use strict'
 
-import * as glSys from './core/gl.js'
-import BoundingBox from './bounding_box.js'
+import * as glSys from '../core/gl.js'
+import BoundingBox, { eBoundCollideStatus } from '../utils/bounding_box.js'
+import CameraState from './camera_state.js'
 
 const eViewport = Object.freeze({
   eOrgX: 0, eOrgY: 1, eWidth: 2, eHeight: 3
 })
 
 class Camera {
-  mWCCenter
-  mWCWidth
   mViewport
   mCameraMatrix
   mBGColor
+
+  /** @type {CameraState} */
+  mCameraState
 
   /**
    * @param {vec2} wcCenter
@@ -20,14 +22,12 @@ class Camera {
    * @param {number[]} viewportArray x, y, width, height
    */
   constructor (wcCenter, wcWidth, viewportArray) {
-    this.mWCCenter = wcCenter
-    this.mWCWidth = wcWidth
+    this.mCameraState = new CameraState(wcCenter, wcWidth)
+
     this.mViewport = viewportArray
 
-    // Camera transform operator
     this.mCameraMatrix = mat4.create()
 
-    // RGB and Alpha
     this.mBGColor = [0.8, 0.8, 0.8, 1]
   }
 
@@ -41,23 +41,23 @@ class Camera {
    * @param {number} yPos
    */
   setWCCenter (xPos, yPos) {
-    this.mWCCenter[0] = xPos
-    this.mWCCenter[1] = yPos
+    let p = vec2.fromValues(xPos, yPos)
+    this.mCameraState.setCenter(p)
   }
 
   getWCCenter () {
-    return this.mWCCenter
+    return this.mCameraState.getCenter()
   }
 
   /**
    * @param {number} width
    */
   setWCWidth (width) {
-    this.mWCWidth = width
+    this.mCameraState.setWidth(width)
   }
 
   getWCWidth () {
-    return this.mWCWidth
+    return this.mCameraState.getWidth()
   }
 
   /**
@@ -84,7 +84,6 @@ class Camera {
 
   setViewAndCameraMatrix () {
     const gl = glSys.get()
-
     gl.viewport(
       this.mViewport[eViewport.eOrgX],
       this.mViewport[eViewport.eOrgY],
@@ -106,6 +105,7 @@ class Camera {
       this.mBGColor[3],
     )
 
+    gl.clearColor(this.mBGColor[0], this.mBGColor[1], this.mBGColor[2], this.mBGColor[3])
     gl.enable(gl.SCISSOR_TEST)
     gl.clear(gl.COLOR_BUFFER_BIT)
     gl.disable(gl.SCISSOR_TEST)
@@ -131,11 +131,39 @@ class Camera {
     const bbox = new BoundingBox(
       aXform.getPosition(),
       aXform.getWidth(),
-      aXform.getHeight())
-    let w = zone * this.getWCWidth()
-    let h = zone * this.getWCHeight()
-    let cameraBound = new BoundingBox(this.getWCCenter(), w, h)
+      aXform.getHeight()
+    )
+
+    const w = zone * this.getWCWidth()
+    const h = zone * this.getWCHeight()
+
+    const cameraBound = new BoundingBox(this.getWCCenter(), w, h)
     return cameraBound.boundCollideStatus(bbox)
+  }
+
+  /**
+   * @param {Transform} aXform
+   * @param {number} zone
+   */
+  clampAtBoundary (aXform, zone) {
+    let status = this.collideWCBound(aXform, zone)
+    if (status !== eBoundCollideStatus.eInside) {
+      let pos = aXform.getPosition()
+      if ((status & eBoundCollideStatus.eCollideTop) !== 0) {
+        pos[1] = (this.getWCCenter())[1] + (zone * this.getWCHeight() / 2) - (aXform.getHeight() / 2)
+      }
+      if ((status & eBoundCollideStatus.eCollideBottom) !== 0) {
+        pos[1] = (this.getWCCenter())[1] - (zone * this.getWCHeight() / 2) + (aXform.getHeight() / 2)
+      }
+      if ((status & eBoundCollideStatus.eCollideRight) !== 0) {
+        pos[0] = (this.getWCCenter())[0] + (zone * this.getWCWidth() / 2) - (aXform.getWidth() / 2)
+      }
+      if ((status & eBoundCollideStatus.eCollideLeft) !== 0) {
+        pos[0] = (this.getWCCenter())[0] - (zone * this.getWCWidth() / 2) + (aXform.getWidth() / 2)
+      }
+    }
+
+    return status
   }
 }
 

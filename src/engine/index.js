@@ -5,8 +5,11 @@ import TextureRenderable from './renderables/texture_renderable.js'
 import SpriteRenderable, { eTexCoordArrayIndex } from './renderables/sprite_renderable.js'
 import SpriteAnimateRenderable, { eAnimationType } from './renderables/sprite_animate_renderable.js'
 import FontRenderable from './renderables/font_renderable.js'
-import Transform from './transform.js'
-import Camera from './camera.js'
+import Transform from './utils/transform.js'
+import Lerp from './utils/lerp.js'
+import LerpVec2 from './utils/lerp_vec2.js'
+import BoundingBox, { eBoundCollideStatus } from './utils/bounding_box.js'
+import Camera from './cameras/camera.js'
 import Scene from './scene.js'
 import GameObject from './game_objects/game_object.js'
 import GameObjectSet from './game_objects/game_object_set.js'
@@ -67,18 +70,22 @@ export default {
   font,
   defaultResources,
   input,
+  Lerp,
+  LerpVec2,
   Camera,
   Scene,
   Transform,
+  BoundingBox,
   Renderable,
   TextureRenderable,
   SpriteRenderable,
   SpriteAnimateRenderable,
   FontRenderable,
-  eTexCoordArrayIndex,
-  eAnimationType,
   GameObject,
   GameObjectSet,
+  eTexCoordArrayIndex,
+  eAnimationType,
+  eBoundCollideStatus,
   init,
   cleanUp,
   clearCanvas
