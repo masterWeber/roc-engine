@@ -29,25 +29,41 @@ class MapEntry {
   }
 }
 
-let mMap = new Map()
+const mMap = new Map()
 let mOutstandingPromises = []
 
+/**
+ * @param {string} path
+ */
 function has (path) {
   return mMap.has(path)
 }
 
+/**
+ * @param {string} key
+ * @param {*} value
+ */
 function set (key, value) {
   mMap.get(key).set(value)
 }
 
+/**
+ * @param {string} path
+ */
 function loadRequested (path) {
   mMap.set(path, new MapEntry(null))
 }
 
+/**
+ * @param {string} path
+ */
 function incRef (path) {
   mMap.get(path).incRef()
 }
 
+/**
+ * @param {string} path
+ */
 function get (path) {
   if (!has(path)) {
     throw new Error('Error [' + path + ']: not loaded')

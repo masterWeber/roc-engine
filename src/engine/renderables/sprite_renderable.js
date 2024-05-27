@@ -25,6 +25,8 @@ class SpriteRenderable extends TextureRenderable {
     this.mElmRight = 1.0
     this.mElmTop = 1.0
     this.mElmBottom = 0.0
+
+    this._setTexInfo()
   }
 
   setElementUVCoordinate (left, right, bottom, top) {
@@ -32,6 +34,8 @@ class SpriteRenderable extends TextureRenderable {
     this.mElmRight = right
     this.mElmBottom = bottom
     this.mElmTop = top
+
+    this._setTexInfo()
   }
 
   setElementPixelPositions (left, right, bottom, top) {
@@ -43,6 +47,8 @@ class SpriteRenderable extends TextureRenderable {
     this.mElmRight = right / imageW
     this.mElmBottom = bottom / imageH
     this.mElmTop = top / imageH
+
+    this._setTexInfo()
   }
 
   getElementUVCoordinateArray () {
@@ -52,6 +58,16 @@ class SpriteRenderable extends TextureRenderable {
       this.mElmRight, this.mElmBottom,
       this.mElmLeft, this.mElmBottom
     ]
+  }
+
+  _setTexInfo () {
+    const imageW = this.mTextureInfo.mWidth
+    const imageH = this.mTextureInfo.mHeight
+
+    this.mElmLeftIndex = this.mElmLeft * imageW
+    this.mElmBottomIndex = this.mElmBottom * imageH
+    this.mElmWidthPixels = ((this.mElmRight - this.mElmLeft) * imageW) + 1
+    this.mElmHeightPixels = ((this.mElmTop - this.mElmBottom) * imageH) + 1
   }
 
   draw (camera) {

@@ -3,13 +3,14 @@
 import * as glSys from '../core/gl.js'
 import * as map from '../core/resource_map.js'
 
-let has = map.has
-let get = map.get
+const has = map.has
+const get = map.get
 
 class TextureInfo {
   mWidth
   mHeight
   mGLTexID
+  mColorArray = null
 
   /**
    * @param {number} w
@@ -88,11 +89,36 @@ function deactivate () {
   gl.bindTexture(gl.TEXTURE_2D, null)
 }
 
+function getColorArray (textureName) {
+  const gl = glSys.get()
+
+  const texInfo = get(textureName)
+  if (texInfo.mColorArray === null) {
+    // create a framebuffer bind it to the texture, and read the color content
+    // Hint from: http://stackoverflow.com/questions/13626606/read-pixels-from-a-webgl-texture
+    const framebuffer = gl.createFramebuffer()
+    gl.bindFramebuffer(gl.FRAMEBUFFER, framebuffer)
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texInfo.mGLTexID, 0)
+    if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE) {
+      let pixels = new Uint8Array(texInfo.mWidth * texInfo.mHeight * 4)
+      gl.readPixels(0, 0, texInfo.mWidth, texInfo.mHeight, gl.RGBA, gl.UNSIGNED_BYTE, pixels)
+      texInfo.mColorArray = pixels
+    } else {
+      throw new Error('WARNING: Engine.Textures.getColorArray() failed!')
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null)
+    gl.deleteFramebuffer(framebuffer)
+  }
+
+  return texInfo.mColorArray
+}
+
 export {
   has,
   get,
   load,
   unload,
+  getColorArray,
   TextureInfo,
   activate,
   deactivate
