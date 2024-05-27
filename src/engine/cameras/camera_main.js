@@ -15,6 +15,8 @@ class Camera {
 
   /** @type {CameraState} */
   mCameraState
+  /** @type {CameraShake | null} */
+  mCameraShake = null
 
   /**
    * @param {vec2} wcCenter
@@ -23,11 +25,8 @@ class Camera {
    */
   constructor (wcCenter, wcWidth, viewportArray) {
     this.mCameraState = new CameraState(wcCenter, wcWidth)
-
     this.mViewport = viewportArray
-
     this.mCameraMatrix = mat4.create()
-
     this.mBGColor = [0.8, 0.8, 0.8, 1]
   }
 
@@ -110,7 +109,12 @@ class Camera {
     gl.clear(gl.COLOR_BUFFER_BIT)
     gl.disable(gl.SCISSOR_TEST)
 
-    const center = this.getWCCenter()
+    let center = []
+    if (this.mCameraShake !== null) {
+      center = this.mCameraShake.getCenter()
+    } else {
+      center = this.getWCCenter()
+    }
 
     // following the translation, scale to: (-1, -1) to (1, 1): a 2x2 square at origin
     mat4.scale(this.mCameraMatrix, mat4.create(), vec3.fromValues(2.0 / this.getWCWidth(), 2.0 / this.getWCHeight(), 1.0))

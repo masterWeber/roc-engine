@@ -1,19 +1,36 @@
-/*
- * File: camera_manipulation.js
- *
- * Adds the manipulation functions to the Camera class
- */
 'use strict'
 
 import { eBoundCollideStatus } from '../utils/bounding_box.js'
 import Camera from './camera_main.js'
+import CameraShake from './camera_shake.js'
 
 Camera.prototype.update = function () {
+  if (this.mCameraShake !== null) {
+    if (this.mCameraShake.done()) {
+      this.mCameraShake = null
+    } else {
+      this.mCameraShake.setRefCenter(this.getWCCenter())
+      this.mCameraShake.update()
+    }
+  }
   this.mCameraState.update()
 }
 
 Camera.prototype.configLerp = function (stiffness, duration) {
   this.mCameraState.config(stiffness, duration)
+}
+
+Camera.prototype.shake = function (deltas, freqs, duration) {
+  this.mCameraShake = new CameraShake(this.mCameraState, deltas, freqs, duration)
+}
+
+Camera.prototype.reShake = function () {
+  const success = this.mCameraShake !== null
+  if (success) {
+    this.mCameraShake.reShake()
+  }
+
+  return success
 }
 
 Camera.prototype.panWith = function (aXform, zone) {
@@ -38,7 +55,7 @@ Camera.prototype.panWith = function (aXform, zone) {
 }
 
 Camera.prototype.panBy = function (dx, dy) {
-  let newC = vec2.clone(this.getWCCenter())
+  const newC = vec2.clone(this.getWCCenter())
   newC[0] += dx
   newC[1] += dy
   this.mCameraState.setCenter(newC)

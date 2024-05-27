@@ -9,6 +9,9 @@ import Transform from './utils/transform.js'
 import Lerp from './utils/lerp.js'
 import LerpVec2 from './utils/lerp_vec2.js'
 import BoundingBox, { eBoundCollideStatus } from './utils/bounding_box.js'
+import Oscillate from './utils/oscillate.js'
+import Shake from './utils/shake.js'
+import ShakeVec2 from './utils/shake_vec2.js'
 import Camera from './cameras/camera.js'
 import Scene from './scene.js'
 import GameObject from './game_objects/game_object.js'
@@ -72,6 +75,9 @@ export default {
   input,
   Lerp,
   LerpVec2,
+  Oscillate,
+  Shake,
+  ShakeVec2,
   Camera,
   Scene,
   Transform,
