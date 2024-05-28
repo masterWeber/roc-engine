@@ -9,9 +9,11 @@ const eViewport = Object.freeze({
 })
 
 class Camera {
-  mViewport
+  mViewport = []
   mCameraMatrix
   mBGColor
+  mViewportBound = 0
+  mScissorBound = []
 
   /** @type {CameraState} */
   mCameraState
@@ -22,10 +24,17 @@ class Camera {
    * @param {vec2} wcCenter
    * @param {number} wcWidth
    * @param {number[]} viewportArray x, y, width, height
+   * @param {number} bound
    */
-  constructor (wcCenter, wcWidth, viewportArray) {
+  constructor (wcCenter, wcWidth, viewportArray, bound) {
     this.mCameraState = new CameraState(wcCenter, wcWidth)
-    this.mViewport = viewportArray
+
+    if (bound !== undefined) {
+      this.mViewportBound = bound
+    }
+
+    this.setViewport(viewportArray, this.mViewportBound)
+
     this.mCameraMatrix = mat4.create()
     this.mBGColor = [0.8, 0.8, 0.8, 1]
   }
@@ -61,13 +70,31 @@ class Camera {
 
   /**
    * @param {number[]} viewportArray x, y, width, height
+   * @param {number|undfined} bound
    */
-  setViewport (viewportArray) {
-    this.mViewport = viewportArray
+  setViewport (viewportArray, bound) {
+    if (bound === undefined) {
+      bound = this.mViewportBound
+    }
+
+    this.mViewport[0] = viewportArray[0] + bound
+    this.mViewport[1] = viewportArray[1] + bound
+    this.mViewport[2] = viewportArray[2] - (2 * bound)
+    this.mViewport[3] = viewportArray[3] - (2 * bound)
+    this.mScissorBound[0] = viewportArray[0]
+    this.mScissorBound[1] = viewportArray[1]
+    this.mScissorBound[2] = viewportArray[2]
+    this.mScissorBound[3] = viewportArray[3]
   }
 
   getViewport () {
-    return this.mViewport
+    const out = []
+    out[0] = this.mScissorBound[0]
+    out[1] = this.mScissorBound[1]
+    out[2] = this.mScissorBound[2]
+    out[3] = this.mScissorBound[3]
+
+    return out
   }
 
   /**
@@ -91,10 +118,10 @@ class Camera {
     )
 
     gl.scissor(
-      this.mViewport[eViewport.eOrgX],
-      this.mViewport[eViewport.eOrgY],
-      this.mViewport[eViewport.eWidth],
-      this.mViewport[eViewport.eHeight]
+      this.mScissorBound[eViewport.eOrgX],
+      this.mScissorBound[eViewport.eOrgY],
+      this.mScissorBound[eViewport.eWidth],
+      this.mScissorBound[eViewport.eHeight]
     )
 
     gl.clearColor(

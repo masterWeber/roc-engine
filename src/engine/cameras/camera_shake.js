@@ -3,6 +3,13 @@
 import ShakeVec2 from '../utils/shake_vec2.js'
 
 class CameraShake {
+  /** @type {vec2} */
+  mOrgCenter
+  /** @type {vec2} */
+  mShakeCenter
+  /** @type {ShakeVec2} */
+  mShake
+
   /**
    * @param {CameraState} state
    * @param {number[]} deltas
@@ -28,8 +35,13 @@ class CameraShake {
     this.mShake.reStart()
   }
 
-  getCenter () { return this.mShakeCenter }
+  getCenter () {
+    return this.mShakeCenter
+  }
 
+  /**
+   * @param {vec2} c
+   */
   setRefCenter (c) {
     this.mOrgCenter[0] = c[0]
     this.mOrgCenter[1] = c[1]
