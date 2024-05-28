@@ -5,6 +5,8 @@ import TextureRenderable from './renderables/texture_renderable.js'
 import SpriteRenderable, { eTexCoordArrayIndex } from './renderables/sprite_renderable.js'
 import SpriteAnimateRenderable, { eAnimationType } from './renderables/sprite_animate_renderable.js'
 import FontRenderable from './renderables/font_renderable.js'
+import LineRenderable from './renderables/line_renderable.js'
+import LightRenderable from './renderables/light_renderable.js'
 import Transform from './utils/transform.js'
 import Lerp from './utils/lerp.js'
 import LerpVec2 from './utils/lerp_vec2.js'
@@ -14,6 +16,7 @@ import Shake from './utils/shake.js'
 import ShakeVec2 from './utils/shake_vec2.js'
 import Camera from './cameras/camera.js'
 import Scene from './scene.js'
+import Light from './lights/lights.js'
 import GameObject from './game_objects/game_object.js'
 import GameObjectSet from './game_objects/game_object_set.js'
 import * as loop from './core/loop.js'
@@ -87,8 +90,11 @@ export default {
   SpriteRenderable,
   SpriteAnimateRenderable,
   FontRenderable,
+  LineRenderable,
+  LightRenderable,
   GameObject,
   GameObjectSet,
+  Light,
   eTexCoordArrayIndex,
   eAnimationType,
   eBoundCollideStatus,

@@ -8,6 +8,12 @@ const eViewport = Object.freeze({
   eOrgX: 0, eOrgY: 1, eWidth: 2, eHeight: 3
 })
 
+class PerRenderCache {
+  mWCToPixelRatio = 1
+  mCameraOrgX = 1
+  mCameraOrgY = 1
+}
+
 class Camera {
   mViewport = []
   mCameraMatrix
@@ -19,6 +25,8 @@ class Camera {
   mCameraState
   /** @type {CameraShake | null} */
   mCameraShake = null
+  /** @type {PerRenderCache} */
+  mRenderCache
 
   /**
    * @param {vec2} wcCenter
@@ -37,6 +45,8 @@ class Camera {
 
     this.mCameraMatrix = mat4.create()
     this.mBGColor = [0.8, 0.8, 0.8, 1]
+
+    this.mRenderCache = new PerRenderCache()
   }
 
   getWCHeight () {
@@ -70,7 +80,7 @@ class Camera {
 
   /**
    * @param {number[]} viewportArray x, y, width, height
-   * @param {number|undfined} bound
+   * @param {number|undefined} bound
    */
   setViewport (viewportArray, bound) {
     if (bound === undefined) {
@@ -148,6 +158,10 @@ class Camera {
 
     // first operation to perform is to translate camera center to the origin
     mat4.translate(this.mCameraMatrix, this.mCameraMatrix, vec3.fromValues(-center[0], -center[1], 0))
+
+    this.mRenderCache.mWCToPixelRatio = this.mViewport[eViewport.eWidth] / this.getWCWidth()
+    this.mRenderCache.mCameraOrgY = center[1] - (this.getWCHeight() / 2)
+    this.mRenderCache.mCameraOrgX = center[0] - (this.getWCWidth() / 2)
   }
 
   getCameraMatrix () {

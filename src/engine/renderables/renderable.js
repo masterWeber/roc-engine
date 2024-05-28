@@ -4,6 +4,13 @@ import * as shaderResources from '../core/shader_resources.js'
 import Transform from '../utils/transform.js'
 
 class Renderable {
+  /** @type {SimpleShader} */
+  mShader
+  /** @type {number[]} */
+  mColor
+  /** @type {Transform} */
+  mXform
+
   constructor () {
     this.mShader = shaderResources.getConstColorShader()
     this.mColor = [1, 1, 1, 1]
@@ -11,7 +18,7 @@ class Renderable {
   }
 
   /**
-   * @param {Camera_main} camera
+   * @param {Camera} camera
    */
   draw (camera) {
     let gl = glSys.get()

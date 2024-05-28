@@ -36,13 +36,40 @@ function init () {
   mGLTextureCoordBuffer = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, mGLTextureCoordBuffer)
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mTextureCoordinates), gl.STATIC_DRAW)
+
+  mLineVertexBuffer = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, mLineVertexBuffer)
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mVerticesOfLine), gl.STATIC_DRAW)
 }
 
+let mLineVertexBuffer = null
+
+function getLineVertexBuffer () {
+  return mLineVertexBuffer
+}
+
+let mVerticesOfLine = [
+  0.5, 0.5, 0.0,
+  -0.5, -0.5, 0.0
+]
+
 function cleanUp () {
+  const gl = glSys.get()
+
   if (mGLVertexBuffer !== null) {
-    glSys.get().deleteBuffer(mGLVertexBuffer)
+    gl.deleteBuffer(mGLVertexBuffer)
     mGLVertexBuffer = null
+  }
+
+  if (mGLTextureCoordBuffer !== null) {
+    gl.deleteBuffer(mGLTextureCoordBuffer)
+    mGLTextureCoordBuffer = null
+  }
+
+  if (mLineVertexBuffer !== null) {
+    gl.deleteBuffer(mLineVertexBuffer)
+    mLineVertexBuffer = null
   }
 }
 
-export { init, get, cleanUp, getTexCoord }
+export { init, get, cleanUp, getTexCoord, getLineVertexBuffer }

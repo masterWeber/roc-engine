@@ -5,5 +5,5 @@ uniform vec4 uGlobalAmbientColor;
 uniform float uGlobalAmbientIntensity;
 
 void main(void) {
-    gl_FragColor = uPixelColor * uGlobalAmbientIntensity * uGlobalAmbientColor;
+    gl_FragColor = uPixelColor;
 }

@@ -1,5 +1,5 @@
 'use strict'
 
-import Camera from './camera_manipulation.js'
+import Camera from "./camera_xform.js"
 
 export default Camera

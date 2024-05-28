@@ -3,6 +3,7 @@
 import * as glSys from '../core/gl.js'
 import * as vertexBuffer from '../core/vertex_buffer.js'
 import * as text from '../resources/text.js'
+import * as defaultResources from '../resources/default_resources.js'
 
 class SimpleShader {
   mCompiledShader = null
@@ -10,6 +11,8 @@ class SimpleShader {
   mPixelColorRef = null
   mModelMatrixRef = null
   mCameraMatrixRef = null
+  mGlobalAmbientColorRef = null
+  mGlobalAmbientIntensityRef = null
 
   /**
    * @param {string} vertexShaderID
@@ -35,6 +38,8 @@ class SimpleShader {
     this.mPixelColorRef = gl.getUniformLocation(this.mCompiledShader, 'uPixelColor')
     this.mModelMatrixRef = gl.getUniformLocation(this.mCompiledShader, 'uModelXformMatrix')
     this.mCameraMatrixRef = gl.getUniformLocation(this.mCompiledShader, 'uCameraXformMatrix')
+    this.mGlobalAmbientColorRef = gl.getUniformLocation(this.mCompiledShader, 'uGlobalAmbientColor')
+    this.mGlobalAmbientIntensityRef = gl.getUniformLocation(this.mCompiledShader, 'uGlobalAmbientIntensity')
   }
 
   /**
@@ -54,6 +59,8 @@ class SimpleShader {
     gl.uniform4fv(this.mPixelColorRef, pixelColor)
     gl.uniformMatrix4fv(this.mModelMatrixRef, false, trsMatrix)
     gl.uniformMatrix4fv(this.mCameraMatrixRef, false, cameraMatrix)
+    gl.uniform4fv(this.mGlobalAmbientColorRef, defaultResources.getGlobalAmbientColor())
+    gl.uniform1f(this.mGlobalAmbientIntensityRef, defaultResources.getGlobalAmbientIntensity())
   }
 }
 
