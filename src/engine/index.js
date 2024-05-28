@@ -32,7 +32,7 @@ import * as shaderResources from './core/shader_resources.js'
 function init (htmlCanvasID) {
   glSys.init(htmlCanvasID)
   vertexBuffer.init()
-  input.init()
+  input.init(htmlCanvasID)
   audio.init()
   shaderResources.init()
   defaultResources.init()

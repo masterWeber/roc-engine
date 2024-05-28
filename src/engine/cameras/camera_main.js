@@ -198,4 +198,5 @@ class Camera {
   }
 }
 
+export { eViewport }
 export default Camera
