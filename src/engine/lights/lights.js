@@ -7,6 +7,12 @@ class Light {
   mPosition
   /** @type {number} */
   mRadius = 10
+  /** @type {number} */
+  mNear = 5
+  /** @type {number} */
+  mFar = 10
+  /** @type {number} */
+  mIntensity = 1
   /** @type {boolean} */
   mIsOn = true
 
@@ -70,10 +76,43 @@ class Light {
   }
 
   /**
-   * @param {boolean} isOn
+   * @param {number} n
    */
-  setLightTo (isOn) {
-    this.mIsOn = isOn
+  setNear (n) {
+    this.mNear = n
+  }
+
+  getNear () {
+    return this.mNear
+  }
+
+  /**
+   * @param {number} f
+   */
+  setFar (f) {
+    this.mFar = f
+  }
+
+  getFar () {
+    return this.mFar
+  }
+
+  /**
+   * @param {number} i
+   */
+  setIntensity (i) {
+    this.mIntensity = i
+  }
+
+  getIntensity () {
+    return this.mIntensity
+  }
+
+  /**
+   * @param {boolean} on
+   */
+  setLightTo (on) {
+    this.mIsOn = on
   }
 
   isLightOn () {

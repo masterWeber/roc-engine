@@ -4,9 +4,10 @@ import SpriteAnimateRenderable from './sprite_animate_renderable.js'
 import * as defaultShaders from '../core/shader_resources.js'
 
 class LightRenderable extends SpriteAnimateRenderable {
-  mLight = null
   /** @type {LightShader} */
   mShader
+  /** @type {Light[]} */
+  mLights = []
 
   constructor (myTexture) {
     super(myTexture)
@@ -14,16 +15,19 @@ class LightRenderable extends SpriteAnimateRenderable {
   }
 
   draw (camera) {
-    this.mShader.setCameraAndLight(camera, this.mLight)
+    this.mShader.setCameraAndLights(camera, this.mLights)
     super.draw(camera)
   }
 
-  getLight () {
-    return this.mLight
+  getLightAt (index) {
+    return this.mLights[index]
   }
 
+  /**
+   * @param {Light} l
+   */
   addLight (l) {
-    this.mLight = l
+    this.mLights.push(l)
   }
 }
 

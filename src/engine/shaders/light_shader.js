@@ -1,16 +1,17 @@
 'use strict'
 
 import SpriteShader from './sprite_shader.js'
-import * as glSys from '../core/gl.js'
+import ShaderLightAt from './shader_light_at.js'
 
 class LightShader extends SpriteShader {
-  mColorRef = null
-  mPosRef = null
-  mRadiusRef = null
-  mIsOnRef = null
-
-  mLight = null
+  /** @type { Light[] | null} */
+  mLights = null
+  /** @type { Camera | null} */
   mCamera = null
+  /** @type { number} */
+  kGLSLuLightArraySize = 4
+  /** @type { ShaderLightAt[] } */
+  mShaderLights = []
 
   /**
    * @param {string} vertexShaderPath
@@ -19,41 +20,43 @@ class LightShader extends SpriteShader {
   constructor (vertexShaderPath, fragmentShaderPath) {
     super(vertexShaderPath, fragmentShaderPath)
 
-    const shader = this.mCompiledShader
-    const gl = glSys.get()
-    this.mColorRef = gl.getUniformLocation(shader, 'uLightColor')
-    this.mPosRef = gl.getUniformLocation(shader, 'uLightPosition')
-    this.mRadiusRef = gl.getUniformLocation(shader, 'uLightRadius')
-    this.mIsOnRef = gl.getUniformLocation(shader, 'uLightOn')
+    for (let i = 0; i < this.kGLSLuLightArraySize; i++) {
+      const ls = new ShaderLightAt(this.mCompiledShader, i)
+      this.mShaderLights.push(ls)
+    }
   }
 
   activate (pixelColor, trsMatrix, cameraMatrix) {
     super.activate(pixelColor, trsMatrix, cameraMatrix)
 
-    if (this.mLight !== null) {
-      this._loadToShader()
-    } else {
-      glSys.get().uniform1i(this.mIsOnRef, false)
+    let numLight = 0
+    if (this.mLights !== null) {
+      while (numLight < this.mLights.length) {
+        this.mShaderLights[numLight].loadToShader(
+          this.mCamera, this.mLights[numLight])
+        numLight++
+      }
+    }
+
+    while (numLight < this.kGLSLuLightArraySize) {
+      this.mShaderLights[numLight].switchOffLight() // off the un-use
+      numLight++
     }
   }
 
-  setCameraAndLight (c, l) {
+  /**
+   * @param {Camera} c
+   * @param {Light[]} l
+   */
+  setCameraAndLights (c, l) {
     this.mCamera = c
-    this.mLight = l
-  }
-
-  _loadToShader () {
-    let gl = glSys.get()
-    gl.uniform1i(this.mIsOnRef, this.mLight.isLightOn())
-    if (this.mLight.isLightOn()) {
-      let p = this.mCamera.wcPosToPixel(this.mLight.getPosition())
-      let r = this.mCamera.wcSizeToPixel(this.mLight.getRadius())
-      let c = this.mLight.getColor()
-
-      gl.uniform4fv(this.mColorRef, c)
-      gl.uniform3fv(this.mPosRef, vec3.fromValues(p[0], p[1], p[2]))
-      gl.uniform1f(this.mRadiusRef, r)
-    }
+    this.mLights = l
+    if (this.mLights.length > this.kGLSLuLightArraySize)
+      throw new Error(
+        'Error: ' + this.mLights.length
+        + ' lights requested. Current max light source supported is: '
+        + this.kGLSLuLightArraySize + ' update kGLSLuLightArraySize variable in light_shader.js  AND  light_fs.glsl to the proper number.'
+      )
   }
 }
 

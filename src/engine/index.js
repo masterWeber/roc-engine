@@ -17,6 +17,7 @@ import ShakeVec2 from './utils/shake_vec2.js'
 import Camera from './cameras/camera.js'
 import Scene from './scene.js'
 import Light from './lights/lights.js'
+import LightSet from './lights/light_set.js'
 import GameObject from './game_objects/game_object.js'
 import GameObjectSet from './game_objects/game_object_set.js'
 import * as loop from './core/loop.js'
@@ -95,6 +96,7 @@ export default {
   GameObject,
   GameObjectSet,
   Light,
+  LightSet,
   eTexCoordArrayIndex,
   eAnimationType,
   eBoundCollideStatus,
