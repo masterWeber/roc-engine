@@ -25,9 +25,9 @@ class TextureInfo {
 }
 
 function processLoadedImage (path, image) {
-  let gl = glSys.get()
+  const gl = glSys.get()
 
-  let textureID = gl.createTexture()
+  const textureID = gl.createTexture()
 
   gl.bindTexture(gl.TEXTURE_2D, textureID)
 
@@ -37,7 +37,7 @@ function processLoadedImage (path, image) {
 
   gl.bindTexture(gl.TEXTURE_2D, null)
 
-  let texInfo = new TextureInfo(image.naturalWidth, image.naturalHeight, textureID)
+  const texInfo = new TextureInfo(image.naturalWidth, image.naturalHeight, textureID)
   map.set(path, texInfo)
 }
 
@@ -70,11 +70,15 @@ function unload (textureName) {
   }
 }
 
-function activate (textureName) {
-  let gl = glSys.get()
-  let texInfo = get(textureName)
+/**
+ * @param {string} textureName
+ * @param {GLenum} textureUnit
+ */
+function activate (textureName, textureUnit = glSys.get().TEXTURE0) {
+  const gl = glSys.get()
+  const texInfo = get(textureName)
 
-  gl.activeTexture(gl.TEXTURE0)
+  gl.activeTexture(textureUnit)
   gl.bindTexture(gl.TEXTURE_2D, texInfo.mGLTexID)
 
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)

@@ -32,9 +32,9 @@ class Camera {
    * @param {vec2} wcCenter
    * @param {number} wcWidth
    * @param {number[]} viewportArray x, y, width, height
-   * @param {number} bound
+   * @param {number | undefined} bound
    */
-  constructor (wcCenter, wcWidth, viewportArray, bound) {
+  constructor (wcCenter, wcWidth, viewportArray, bound = undefined) {
     this.mCameraState = new CameraState(wcCenter, wcWidth)
 
     if (bound !== undefined) {

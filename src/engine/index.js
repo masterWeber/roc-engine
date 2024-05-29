@@ -7,6 +7,7 @@ import SpriteAnimateRenderable, { eAnimationType } from './renderables/sprite_an
 import FontRenderable from './renderables/font_renderable.js'
 import LineRenderable from './renderables/line_renderable.js'
 import LightRenderable from './renderables/light_renderable.js'
+import IllumRenderable from './renderables/illum_renderable.js'
 import Transform from './utils/transform.js'
 import Lerp from './utils/lerp.js'
 import LerpVec2 from './utils/lerp_vec2.js'
@@ -93,6 +94,7 @@ export default {
   FontRenderable,
   LineRenderable,
   LightRenderable,
+  IllumRenderable,
   GameObject,
   GameObjectSet,
   Light,

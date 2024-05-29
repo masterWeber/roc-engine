@@ -13,6 +13,9 @@ class TextureRenderable extends Renderable {
   mElmLeftIndex = 0
   mElmBottomIndex = 0
 
+  /**
+   * @param {string} myTexture
+   */
   constructor (myTexture) {
     super()
     super.setColor([1, 1, 1, 0])

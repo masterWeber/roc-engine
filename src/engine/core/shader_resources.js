@@ -7,35 +7,43 @@ import LineShader from '../shaders/line_shader.js'
 import * as text from '../resources/text.js'
 import * as map from './resource_map.js'
 import LightShader from '../shaders/light_shader.js'
+import IllumShader from '../shaders/illum_shader.js'
 
-let kSimpleVS = '/src/glsl_shaders/simple_vs.glsl'
-let kSimpleFS = '/src/glsl_shaders/simple_fs.glsl'
+const kSimpleVS = '/src/glsl_shaders/simple_vs.glsl'
+const kSimpleFS = '/src/glsl_shaders/simple_fs.glsl'
 let mConstColorShader = null
 
 function getConstColorShader () {
   return mConstColorShader
 }
 
-let kTextureVS = '/src/glsl_shaders/texture_vs.glsl'
-let kTextureFS = '/src/glsl_shaders/texture_fs.glsl'
+const kTextureVS = '/src/glsl_shaders/texture_vs.glsl'
+const kTextureFS = '/src/glsl_shaders/texture_fs.glsl'
 let mTextureShader = null
 
 function getTextureShader () {
   return mTextureShader
 }
 
-let kLineFS = 'src/glsl_shaders/line_fs.glsl'
+const kLineFS = 'src/glsl_shaders/line_fs.glsl'
 let mLineShader = null
 
 function getLineShader () {
   return mLineShader
 }
 
-let kLightFS = 'src/glsl_shaders/light_fs.glsl'
+const kLightFS = 'src/glsl_shaders/light_fs.glsl'
 let mLightShader = null
 
 function getLightShader () {
   return mLightShader
+}
+
+const kIllumFS = 'src/glsl_shaders/illum_fs.glsl'
+let mIllumShader = null
+
+function getIllumShader () {
+  return mIllumShader
 }
 
 let mSpriteShader = null
@@ -50,6 +58,7 @@ function createShaders () {
   mSpriteShader = new SpriteShader(kTextureVS, kTextureFS)
   mLineShader = new LineShader(kSimpleVS, kLineFS)
   mLightShader = new LightShader(kTextureVS, kLightFS)
+  mIllumShader = new IllumShader(kTextureVS, kIllumFS)
 }
 
 function init () {
@@ -61,7 +70,8 @@ function init () {
         text.load(kTextureFS),
         text.load(kTextureVS),
         text.load(kLineFS),
-        text.load(kLightFS)
+        text.load(kLightFS),
+        text.load(kIllumFS)
       ])
       resolve()
     }).then(
@@ -78,12 +88,15 @@ function cleanUp () {
   mSpriteShader.cleanUp()
   mLineShader.cleanUp()
   mLightShader.cleanUp()
+  mIllumShader.cleanUp()
+
   text.unload(kSimpleVS)
   text.unload(kSimpleFS)
   text.unload(kTextureVS)
   text.unload(kTextureFS)
   text.unload(kLineFS)
   text.unload(kLightFS)
+  text.unload(kIllumFS)
 }
 
 export {
@@ -93,5 +106,6 @@ export {
   getTextureShader,
   getSpriteShader,
   getLineShader,
-  getLightShader
+  getLightShader,
+  getIllumShader
 }
