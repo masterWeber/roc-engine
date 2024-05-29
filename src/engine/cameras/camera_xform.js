@@ -18,4 +18,11 @@ Camera.prototype.wcSizeToPixel = function (s) {  //
   return (s * this.mRenderCache.mWCToPixelRatio) + 0.5
 }
 
+Camera.prototype.wcDirToPixel = function (d) {
+  let x = d[0] * this.mRenderCache.mWCToPixelRatio
+  let y = d[1] * this.mRenderCache.mWCToPixelRatio
+  let z = d[2]
+  return vec3.fromValues(x, y, z)
+}
+
 export default Camera

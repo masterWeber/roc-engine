@@ -12,6 +12,7 @@ class PerRenderCache {
   mWCToPixelRatio = 1
   mCameraOrgX = 1
   mCameraOrgY = 1
+  mCameraPosInPixelSpace = vec3.fromValues(0, 0, 0)
 }
 
 class Camera {
@@ -20,6 +21,7 @@ class Camera {
   mBGColor
   mViewportBound = 0
   mScissorBound = []
+  kCameraZ = 10
 
   /** @type {CameraState} */
   mCameraState
@@ -162,6 +164,11 @@ class Camera {
     this.mRenderCache.mWCToPixelRatio = this.mViewport[eViewport.eWidth] / this.getWCWidth()
     this.mRenderCache.mCameraOrgY = center[1] - (this.getWCHeight() / 2)
     this.mRenderCache.mCameraOrgX = center[0] - (this.getWCWidth() / 2)
+
+    let p = this.wcPosToPixel(this.getWCCenter())
+    this.mRenderCache.mCameraPosInPixelSpace[0] = p[0]
+    this.mRenderCache.mCameraPosInPixelSpace[1] = p[1]
+    this.mRenderCache.mCameraPosInPixelSpace[2] = this.fakeZInPixelSpace(this.kCameraZ)
   }
 
   getCameraMatrix () {
@@ -209,6 +216,10 @@ class Camera {
     }
 
     return status
+  }
+
+  getWCCenterInPixelSpace () {
+    return this.mRenderCache.mCameraPosInPixelSpace
   }
 }
 

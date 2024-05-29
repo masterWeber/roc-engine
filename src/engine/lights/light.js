@@ -1,5 +1,9 @@
 'use strict'
 
+const eLightType = Object.freeze({
+  ePointLight: 0, eDirectionalLight: 1, eSpotLight: 2
+})
+
 class Light {
   /** @type {vec4} */
   mColor
@@ -7,18 +11,29 @@ class Light {
   mPosition
   /** @type {number} */
   mRadius = 10
+  /** @type {vec3} */
+  mDirection
   /** @type {number} */
   mNear = 5
   /** @type {number} */
   mFar = 10
   /** @type {number} */
+  mInner = 0.1
+  /** @type {number} */
+  mOuter = 0.3
+  /** @type {number} */
   mIntensity = 1
+  /** @type {number} */
+  mDropOff = 1
+  /** @type {number} */
+  mLightType = eLightType.ePointLight
   /** @type {boolean} */
   mIsOn = true
 
   constructor () {
     this.mColor = vec4.fromValues(0.1, 0.1, 0.1, 1)
     this.mPosition = vec3.fromValues(0, 0, 5)
+    this.mDirection = vec3.fromValues(0, 0, -1)
   }
 
   /**
@@ -64,6 +79,14 @@ class Light {
     return this.mPosition
   }
 
+  setDirection (d) {
+    this.mDirection = vec3.clone(d)
+  }
+
+  getDirection () {
+    return this.mDirection
+  }
+
   /**
    * @param {number} r
    */
@@ -97,6 +120,22 @@ class Light {
     return this.mFar
   }
 
+  setInner (r) {
+    this.mInner = r
+  }
+
+  getInner () {
+    return this.mInner
+  }
+
+  setOuter (r) {
+    this.mOuter = r
+  }
+
+  getOuter () {
+    return this.mOuter
+  }
+
   /**
    * @param {number} i
    */
@@ -106,6 +145,22 @@ class Light {
 
   getIntensity () {
     return this.mIntensity
+  }
+
+  setDropOff (d) {
+    this.mDropOff = d
+  }
+
+  getDropOff () {
+    return this.mDropOff
+  }
+
+  setLightType (t) {
+    this.mLightType = t
+  }
+
+  getLightType () {
+    return this.mLightType
   }
 
   /**
@@ -120,4 +175,5 @@ class Light {
   }
 }
 
+export { eLightType }
 export default Light
